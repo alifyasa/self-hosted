@@ -18,7 +18,7 @@ echo "to continue, please switch to the postgres user and create a new role and 
 echo "Run the following commands:
 
 sudo su - postgres
-createuser --interactive
+createuser --interactive --pwprompt
 createdb mydatabase
 
 You can now connect to the PostgreSQL database using the psql command. For example, to connect to the database you created, run:
