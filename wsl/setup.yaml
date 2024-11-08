@@ -1,7 +1,7 @@
 - name: Setup WSL
   hosts: localhost
   vars_files:
-    - ../../secrets/ssh/alif-at-alifyasa-dot-id.yaml
+    - ../secrets/ssh/alif-at-alifyasa-dot-id.yaml
   tasks:
     - name: APT Update
       become: true
