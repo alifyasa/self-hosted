@@ -1,0 +1,3 @@
+skip_list:
+ # Ignore when a playbook needs -JK
+ - internal-error

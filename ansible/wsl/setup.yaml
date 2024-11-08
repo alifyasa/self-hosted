@@ -1,0 +1,47 @@
+- name: Setup WSL
+  hosts: localhost
+  vars_files:
+    - ../../secrets/ssh/alif-at-alifyasa-dot-id.yaml
+  tasks:
+    - name: APT Update
+      become: true
+      ansible.builtin.apt:
+        update_cache: true
+    - name: APT Upgrade
+      become: true
+      ansible.builtin.apt:
+        upgrade: true
+    - name: Install Python
+      become: true
+      ansible.builtin.apt:
+        state: "present"
+        update_cache: true
+        name:
+          - python3
+          - python-is-python3
+          - python3-pip
+          - python3-venv
+    - name: Copy SSH Key
+      ansible.builtin.copy:
+        content: "{{ ssh_key }}"
+        dest: "~/.ssh/id_rsa"
+        mode: "0600"
+    - name: Copy SSH Public Key
+      ansible.builtin.copy:
+        content: "{{ ssh_pubkey }}"
+        dest: "~/.ssh/id_rsa.pub"
+        mode: "0644"
+    - name: Install Keychain to Manage SSH Keys in WSL
+      become: true
+      ansible.builtin.apt:
+        state: "present"
+        update_cache: true
+        name:
+          - keychain
+    - name: Add Keychain Configuration to Shell Profile
+      ansible.builtin.lineinfile:
+        path: "{{ ansible_env.HOME }}/.bashrc"
+        line: 'eval $(keychain --eval --agents ssh id_rsa)'
+        state: present
+        mode: "0644"
+        create: true
